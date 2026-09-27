@@ -1,0 +1,31 @@
+HeLM:
+
+1.- Crar el repositorio
+helm create mpravipu
+
+2.- Instala el repositorio hace el deploy
+helm install -f mpravipu/values-mpravipu01.yaml mpravipu ./mpravipu
+
+3.- Actualiza 
+helm upgrade -f mpravipu/values-mpravipu01.yaml mpravipu ./mpravipu
+
+4.- Lista los repositorios
+helm ls
+
+5.- Lista los releases para ese repositorio
+helm history mpravipu
+
+6.- Hacer rolback a alguna version anterior
+helm rollback mpravipu 1
+
+7.- Ver el estado del release
+helm status mpravipu
+
+8.- Para desinstalar
+helm uninstall mpravipu
+
+9.- Crear el paquete
+helm package mpravipu --debug
+
+10.- Istalar desde el paquete .zip
+helm upgrade --install --values values-mpravipu01.yaml --set application.env=dev,application.name=mpravipu --wait --timeout=600s mpravipu mpravipu-1.0.0.tgz

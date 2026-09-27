@@ -1,0 +1,64 @@
+
+1.- kubectl create namespace manuelpravia
+
+2.- openssl genrsa -out mpravia.key 2048
+
+3.- openssl req -new -key mpravia.key -out mpravia.csr -subj "/CN=mpravia/O=kubernetes"
+
+4.- nano signing-request.yaml
+
+5.- cat mpravia.csr | base64 | tr -d '\n'    [Convert]::ToBase64String([IO.File]::ReadAllBytes("mpravia.csr"))
+
+6.- kubectl create -f signing-request.yaml
+
+7.- kubectl get csr
+
+8.- kubectl certificate approve mpravia-csr
+
+9.- kubectl get csr mpravia-csr -o yaml
+
+10.- kubectl get csr mpravia-csr -o jsonpath='{.status.certificate}' | base64 --decode > mpravia.crt
+10. $cert = kubectl get csr mpravia-csr -o jsonpath='{.status.certificate}'
+[System.IO.File]::WriteAllBytes("mpravia.crt", [System.Convert]::FromBase64String($cert))
+
+11.- kubectl config set-credentials mpravia --client-certificate=mpravia.crt --client-key=mpravia.key
+
+12.- kubectl config view
+
+13.- kubectl config set-context mpravia-context --cluster=minikube --namespace=manuelpravia --user=mpravia
+
+14.- kubectl -n manuelpravia create deployment nginx --image=nginx:alpine
+
+15.- kubectl --context=mpravia-context get pods
+
+16.- role.yaml
+
+17.- kubectl create -f role.yaml
+
+18.- kubectl -n manuelpravia get roles
+
+19- rolebinding.yaml
+
+20.- kubectl create -f rolebinding.yaml
+
+21.- kubectl -n manuelpravia get rolebindings
+
+22.- kubectl --context=mpravia-context get pods
+
+23.- kubectl config get-contexts
+
+24.- kubectl config use-context mpravia-context
+
+25.- kubectl config view --minify
+
+26.- Copiar el resultado anterior en un archivo config.yml
+
+27.- cat C:/Users/Usuario/.minikube/ca.crt | base64 | tr -d '\n'
+
+28.- cat mpravia.crt | base64 | tr -d '\n'
+
+29.- cat mpravia.key | base64 | tr -d '\n'
+
+30.- los resultados obtenidos en los tres comandos anteriores reemplazar en el archivo config.yml
+
+31.- 
